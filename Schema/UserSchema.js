@@ -15,13 +15,13 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    minlength: 4,
+    maxlength: 40,
   },
   password: {
     type: String,
     required: true,
     select: false,
-    minlength: 4,
-    maxlength: 40,
   },
 });
 
