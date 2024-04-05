@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 //schema
@@ -53,6 +52,23 @@ const User = class {
         resolve();
       } catch (error) {
         reject(error);
+      }
+    });
+  }
+  static isUserExist({ loginId }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userDb = await UserSchema.findOne({
+          $or: [{ email: loginId }, { username: loginId }],
+        }).select("+password");
+        if (!userDb) reject("User does not exist, please signup");
+        resolve(userDb);
+      } catch (error) {
+        return resolve.send({
+          status: 500,
+          message: "Internal Server Error",
+          error: error,
+        });
       }
     });
   }
