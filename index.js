@@ -13,8 +13,9 @@ const store = new mongoDbSession({
 //file import
 const db = require("./db");
 //router
-const AuthRouter = require("./Routes/AuthRouter");
-const BlogRouter = require("./Routes/BlogRouter");
+const AuthRouter = require("./Routes/AuthRoutes");
+const BlogRouter = require("./Routes/BlogRoutes");
+const isAuth = require("./Middlewares/AuthMiddleware");
 //middleware
 app.use(express.json());
 app.use(
@@ -25,8 +26,9 @@ app.use(
     store: store,
   })
 );
+//routes
 app.use("/auth", AuthRouter);
-app.use("/blog", BlogRouter);
+app.use("/blog", isAuth, BlogRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(clc.yellowBright("Server is running at PORT : "));

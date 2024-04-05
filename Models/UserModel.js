@@ -72,6 +72,21 @@ const User = class {
       }
     });
   }
+  static isUserIdExist(userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userDb = await UserSchema.findOne({ _id: userId });
+        if (!userDb) reject("User does not exist");
+        resolve();
+      } catch (error) {
+        return res.send({
+          status: 500,
+          message: "Internal server error",
+          error: error,
+        });
+      }
+    });
+  }
 };
 
 module.exports = User;
