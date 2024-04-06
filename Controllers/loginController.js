@@ -20,7 +20,7 @@ const loginController = async (req, res) => {
         status: 400,
         message: "Incorrect Password",
       });
-    console.log(req.session);
+    // console.log(req.session);
     req.session.isAuth = true;
     req.session.user = {
       userId: userDb._id,

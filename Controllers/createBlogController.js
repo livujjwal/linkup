@@ -1,10 +1,11 @@
-const createBlog = require("../Models/BlogModel");
+const { createBlog } = require("../Models/BlogModel");
 const User = require("../Models/UserModel");
 const blogValidation = require("../Utils/BlogValidation");
 
 const createBlogController = async (req, res) => {
   const { title, bodyText } = req.body;
   const userId = req.session.user.userId;
+  const creationDateTime = Date.now();
   console.log(title, bodyText);
   try {
     await blogValidation({ title, bodyText });
@@ -23,7 +24,12 @@ const createBlogController = async (req, res) => {
     });
   }
   try {
-    const blogDb = await createBlog({ title, bodyText, userId });
+    const blogDb = await createBlog({
+      title,
+      bodyText,
+      userId,
+      creationDateTime,
+    });
 
     return res.send({
       status: 201,

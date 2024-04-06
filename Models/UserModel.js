@@ -64,7 +64,7 @@ const User = class {
         if (!userDb) reject("User does not exist, please signup");
         resolve(userDb);
       } catch (error) {
-        return resolve.send({
+        return res.send({
           status: 500,
           message: "Internal Server Error",
           error: error,

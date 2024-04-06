@@ -17,8 +17,8 @@ const BlogSchema = new Schema({
     maxLength: 1000,
   },
   creationDateTime: {
-    type: Date,
-    default: Date.now(),
+    type: String,
+    required: true,
   },
   userId: {
     type: Schema.Types.ObjectId,
