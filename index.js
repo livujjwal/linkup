@@ -16,6 +16,7 @@ const db = require("./db");
 const AuthRouter = require("./Routes/AuthRoutes");
 const BlogRouter = require("./Routes/BlogRoutes");
 const isAuth = require("./Middlewares/AuthMiddleware");
+const FollowRouter = require("./Routes/FollowRoutes");
 //middleware
 app.use(express.json());
 app.use(
@@ -29,6 +30,7 @@ app.use(
 //routes
 app.use("/auth", AuthRouter);
 app.use("/blog", isAuth, BlogRouter);
+app.use("/follow", isAuth, FollowRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(clc.yellowBright("Server is running at PORT : "));
