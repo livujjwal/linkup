@@ -6,7 +6,6 @@ const createBlogController = async (req, res) => {
   const { title, bodyText } = req.body;
   const userId = req.session.user.userId;
   const creationDateTime = Date.now();
-  console.log(title, bodyText);
   try {
     await blogValidation({ title, bodyText });
   } catch (error) {

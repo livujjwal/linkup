@@ -1,9 +1,7 @@
 const AccessSchema = require("../Schema/AccessSchema");
 
 const rateLimiting = async (req, res, next) => {
-  // console.log(req.session);
   const sid = req.session.id;
-  console.log(sid);
   try {
     const accessDb = await AccessSchema.findOne({ sessionId: sid });
     if (!accessDb) {
@@ -15,9 +13,8 @@ const rateLimiting = async (req, res, next) => {
       next();
       return;
     }
-    console.log(Date.now() - accessDb.time);
     const timeDiff = Date.now() - accessDb.time;
-    if (timeDiff > 500)
+    if (timeDiff < 500)
       return res.send({
         status: 400,
         message: "Too many request,please wait for some time",

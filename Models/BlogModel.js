@@ -30,9 +30,13 @@ const getAllBlogs = ({ followerUserId, SKIP }) => {
       });
       const followingUserIds = followingUsers.map(({ _id }) => _id);
       // console.log(followingUserIds);
+      followingUserIds.push(followerUserId);
       const blogDb = await BlogSchema.aggregate([
         {
-          $match: { userId: { $in: followingUserIds } },
+          $match: {
+            userId: { $in: followingUserIds },
+            isDeleted: { $ne: true },
+          },
         },
         //sort based on time
         {
@@ -45,6 +49,7 @@ const getAllBlogs = ({ followerUserId, SKIP }) => {
           },
         },
       ]);
+
       resolve(blogDb[0].data);
     } catch (error) {
       reject(error);
@@ -58,7 +63,7 @@ const getMyBlogs = ({ SKIP, userId }) => {
       const blogDb = await BlogSchema.aggregate([
         //match
         {
-          $match: { userId: userId },
+          $match: { userId: userId, isDeleted: false },
         },
         //sort based on time
         {
@@ -105,7 +110,14 @@ const editBlog = ({ title, bodyText, blogId }) => {
 const deleteBlog = ({ blogId }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const prevblogDb = await BlogSchema.findOneAndDelete({ _id: blogId });
+      // const prevblogDb = await BlogSchema.findOneAndDelete({ _id: blogId });
+      const prevblogDb = await BlogSchema.findOneAndUpdate(
+        { _id: blogId },
+        {
+          isDeleted: true,
+          deletionDateTime: Date.now(),
+        }
+      );
       resolve(prevblogDb);
     } catch (error) {
       reject(error);

@@ -25,6 +25,14 @@ const BlogSchema = new Schema({
     required: true,
     ref: "user",
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+  deletionDateTime: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("blog", BlogSchema);
