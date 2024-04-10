@@ -14,7 +14,7 @@ const FollowSchema = new Schema({
   },
   creationDateTime: {
     type: Date,
-    default: Date.now(),
+    required: true,
   },
 });
 module.exports = mongoose.model("follow", FollowSchema);

@@ -74,9 +74,11 @@ const User = class {
   }
   static isUserIdExist(userId) {
     return new Promise(async (resolve, reject) => {
+      // console.log(userId);
       try {
         const userDb = await UserSchema.findOne({ _id: userId });
         if (!userDb) reject("User does not exist");
+        // console.log(userDb);
         resolve();
       } catch (error) {
         return res.send({
@@ -85,6 +87,16 @@ const User = class {
           error: error,
         });
       }
+    });
+  }
+  static getUserDetailsList(userIdList) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userList = await UserSchema.find(
+          {_id : {$in :userIdList}}
+        )
+        resolve(userList)
+      } catch (error) {reject(error)}
     });
   }
 };

@@ -1,6 +1,7 @@
 const { isValidObjectId } = require("mongoose");
 const { LIMIT } = require("../PrivateConstants");
 const BlogSchema = require("../Schema/BlogSchema");
+const { followingUserList } = require("./FollowModel");
 
 const createBlog = ({ title, bodyText, userId, creationDateTime }) => {
   return new Promise(async (resolve, reject) => {
@@ -19,11 +20,20 @@ const createBlog = ({ title, bodyText, userId, creationDateTime }) => {
   });
 };
 
-const getAllBlogs = ({ SKIP }) => {
+const getAllBlogs = ({ followerUserId, SKIP }) => {
   return new Promise(async (resolve, reject) => {
     //pagination,sort
     try {
+      const followingUsers = await followingUserList({
+        followerUserId,
+        SKIP,
+      });
+      const followingUserIds = followingUsers.map(({ _id }) => _id);
+      // console.log(followingUserIds);
       const blogDb = await BlogSchema.aggregate([
+        {
+          $match: { userId: { $in: followingUserIds } },
+        },
         //sort based on time
         {
           $sort: { creationDateTime: -1 },
